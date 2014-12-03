@@ -75,16 +75,8 @@ layers:
                 path: 1
 
     buildings:
-        # filter: function () { return feature.name != null; }
-        interactive: true  # shows popup labels
         color:
-            default: |
-                function () {
-                    var h = feature.height || 20;
-                    h = Math.min((h + 50)/ 250, .8);
-                    return [h, h, h];
-                }
-            # default: Style.color.randomColor
+            default: [.5, .5, .5]
         extrude:
             default: function () { return ((zoom >= 15 && feature.height > 20) || zoom >= 16) }
 

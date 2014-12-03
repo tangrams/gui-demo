@@ -30,8 +30,6 @@
     };
     var osm_debug = false;
 
-    /***** GUI/debug controls *****/
-
     /*** URL parsing ***/
 
     // URL hash pattern is one of:
@@ -78,10 +76,6 @@
         var map_latlng = map.getCenter(),
             url_options = [default_tile_source, map_latlng.lat, map_latlng.lng, map.getZoom()];
 
-        if (rS) {
-            url_options.push('rstats');
-        }
-
         window.location.hash = url_options.join(',');
     }
 
@@ -125,30 +119,7 @@
     window.addEventListener('resize', resizeMap);
     resizeMap();
 
-    // Render/GL stats: http://spite.github.io/rstats/
-    // Activate with 'rstats' anywhere in options list in URL
-    if (url_ui && url_ui.indexOf('rstats') >= 0) {
-        var glS = new glStats();
-        glS.fractions = []; // turn this off till we need it
-
-        rS = new rStats({
-            values: {
-                frame: { caption: 'Total frame time (ms)', over: 5 },
-                raf: { caption: 'Time since last rAF (ms)' },
-                fps: { caption: 'Framerate (FPS)', below: 30 },
-                rendertiles: { caption: 'Rendered tiles' },
-                features: { caption: '# of geo features' },
-                glbuffers: { caption: 'GL buffers (MB)' }
-            },
-            CSSPath : 'demos/lib/',
-            plugins: [glS]
-        });
-
-        // Move it to the bottom-left so it doesn't obscure zoom controls
-        var rSDOM = document.querySelector('.rs-base');
-        rSDOM.style.bottom = '0px';
-        rSDOM.style.top = 'inherit';
-    }
+    /***** GUI/debug controls *****/
 
     // Create dat GUI
     var gui = new dat.GUI({ autoPlace: true });
@@ -208,13 +179,10 @@
             layer.scene.updateStyles();
         });
 
-        // Feature selection on hover
-        gui['feature info'] = true;
-        gui.add(gui, 'feature info');
-
         // Layers
         var layer_gui = gui.addFolder('Layers');
         var layer_controls = {};
+        var layer_colors = {};
         layer.scene.layers.forEach(function(l) {
             if (layer.scene.styles.layers[l.name] == null) {
                 return;
@@ -227,82 +195,26 @@
                     layer.scene.styles.layers[l.name].visible = value;
                     layer.scene.rebuildGeometry();
                 });
+            var c = layer.scene.styles.layers[l.name].color.default;
+            layer_colors[l.name] = [c[0]*255, c[1]*255, c[2]*255];
+            console.log(l.name, layer_colors[l.name]);
+            layer_gui.
+                addColor(layer_colors, l.name).
+                onChange(function(value) {
+                    layer.scene.styles.layers[l.name].color.default = [value[0]/255, value[1]/255, value[2]/255];
+                    console.log(value);
+                    layer.scene.rebuildGeometry();
+                    });
         });
-
-    }
-
-
-    // Feature selection
-    function initFeatureSelection () {
-        // Selection info shown on hover
-        var selection_info = document.createElement('div');
-        selection_info.setAttribute('class', 'label');
-        selection_info.style.display = 'block';
-
-        // Show selected feature on hover
-        scene.container.addEventListener('mousemove', function (event) {
-
-            var pixel = { x: event.clientX, y: event.clientY };
-
-            scene.getFeatureAt(
-                pixel,
-                function (selection) {
-                    var feature = selection.feature;
-                    if (feature != null) {
-                        // console.log("selection map: " + JSON.stringify(feature));
-
-                        var label = '';
-                        if (feature.properties.name != null) {
-                            label = feature.properties.name;
-                        }
-
-                        if (label != '') {
-                            selection_info.style.left = (pixel.x + 5) + 'px';
-                            selection_info.style.top = (pixel.y + 15) + 'px';
-                            selection_info.innerHTML = '<span class="labelInner">' + label + '</span>';
-                            scene.container.appendChild(selection_info);
-                        }
-                        else if (selection_info.parentNode != null) {
-                            selection_info.parentNode.removeChild(selection_info);
-                        }
-                    }
-                    else if (selection_info.parentNode != null) {
-                        selection_info.parentNode.removeChild(selection_info);
-                    }
-                }
-            );
-
-            // Don't show labels while panning
-            if (scene.panning == true) {
-                if (selection_info.parentNode != null) {
-                    selection_info.parentNode.removeChild(selection_info);
-                }
-            }
-        });
+        layer_gui.open();
     }
 
     // Pre-render hook
     function preRender () {
-        if (rS != null) { // rstats
-            rS('frame').start();
-            // rS('raf').tick();
-            rS('fps').frame();
-
-            if (scene.dirty) {
-                glS.start();
-            }
-        }
     }
 
     // Post-render hook
     function postRender () {
-        if (rS != null) { // rstats
-            rS('frame').end();
-            rS('rendertiles').set(scene.renderable_tiles_count);
-            rS('glbuffers').set((scene.getDebugSum('buffer_size') / (1024*1024)).toFixed(2));
-            rS('features').set(scene.getDebugSum('features'));
-            rS().update();
-        }
     }
 
     /***** Render loop *****/
@@ -311,7 +223,6 @@
         layer.on('init', function() {    
             updateURL();
             addGUI();        
-            initFeatureSelection();
         });
         layer.addTo(map);
 
