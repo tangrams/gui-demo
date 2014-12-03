@@ -1,0 +1,101 @@
+camera:
+    type: perspective
+    focal_length: [[16, 2], [20, 6]] # pairs of [zoom, focal len]
+    vanishing_point: [-250, -250] # relative to center of screen, in pixels
+
+    # type: isometric
+    # axis: [1, .5]
+
+    # type: flat
+
+lighting:
+    type: directional
+    direction: [0, 1, -.5]
+    ambient: 0.5
+
+    # type: point
+    # position: [0, 0, 150] # relative to camera position, in pixels
+    # ambient: 0.25
+    # backlight: true # illuminates buildings when the light is inside them
+
+
+layers:
+    earth:
+        color:
+            default: [0.175, 0.175, 0.175]
+
+    landuse:
+        interactive: true  # shows popup labels
+        color:
+            default: [0.5, 0.875, 0.5]
+            pitch: [0.3, 0.675, 0.3]
+
+    water:
+        interactive: true  # shows popup labels
+        color:
+            default: [0.5, 0.5, 0.875]
+        outline:
+            color:
+                default: [0.6, 0.6, 0.975]
+            width:
+                default:
+                    function () {
+                        return (
+                            zoom >= 16 &&
+                            (feature.kind != 'ocean' && feature.kind != 'riverbank') &&
+                            (2.5 * Math.log(zoom))
+                        );
+                    }
+
+    roads:
+        interactive: true  # shows popup labels
+        order: function () { return feature.sort_key * .000025; }
+        color:
+            default: [0.4, 0.4, 0.4]
+            highway: [1.0, 1.0, 1.0]
+            major_road: [0.5, 0.5, 0.5]
+            minor_road: [0.65, 0.65, 0.65]
+            path: [0.8, 0.8, 0.8]
+            rail: [0.5, 0.0, 0.0]
+            debug: [1, 0, 0]
+        width:
+            default: 8
+            highway: 10
+            major_road: 8
+            minor_road: 5
+            path: 3
+        outline:
+            color:
+                default: [0.2, 0.2, 0.2]
+            width:
+                default: 2
+                highway: 3
+                major_road: 1
+                minor_road: 1
+                path: 1
+
+    buildings:
+        # filter: function () { return feature.name != null; }
+        interactive: true  # shows popup labels
+        color:
+            default: |
+                function () {
+                    var h = feature.height || 20;
+                    h = Math.min((h + 50)/ 250, .8);
+                    return [h, h, h];
+                }
+            # default: Style.color.randomColor
+        extrude:
+            default: function () { return ((zoom >= 15 && feature.height > 20) || zoom >= 16) }
+
+    pois:
+        mode:
+            name: points
+        filter: function () { return zoom >= 15 && feature.name != null; }
+        # visible: false
+        interactive: true  # shows popup labels
+        color:
+            default: [1, 1, 0]
+        size:
+            default: 5px
+            
