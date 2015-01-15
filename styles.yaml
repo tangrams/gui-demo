@@ -21,73 +21,101 @@ lighting:
 
 layers:
     earth:
-        color:
-            default: [0.175, 0.175, 0.175]
+        geometry: { source: osm, filter: earth }
+        style:
+            color: [0.175, 0.175, 0.175]
 
     landuse:
-        interactive: true  # shows popup labels
-        color:
-            default: [0.5, 0.875, 0.5]
-            pitch: [0.3, 0.675, 0.3]
+        geometry: { source: osm, filter: landuse }
+        style:
+            interactive: true  # shows popup labels
+        parks:
+            filter: { kind: park }
+            style:
+                order: 1
+                color: [0.5, 0.875, 0.5]
+        playgrounds:
+            filter: { kind: [pitch, playground] }
+            style:
+                order: 1.1
+                color: [0.3, 0.675, 0.3]
+        cemeteries:
+            filter: { kind: cemetery }
+            style:
+                order: 1
+                color: [0.3, 0.4, 0.3]
 
     water:
-        interactive: true  # shows popup labels
-        color:
-            default: [0.5, 0.5, 0.875]
+        geometry: { source: osm, filter: water }
+        style:
+            order: 2
+            interactive: true  # shows popup labels
+            color: [0.5, 0.5, 0.875]
         outline:
-            color:
-                default: [0.6, 0.6, 0.975]
-            width:
-                default:
-                    function () {
-                        return (
-                            zoom >= 16 &&
-                            (feature.kind != 'ocean' && feature.kind != 'riverbank') &&
-                            (2.5 * Math.log(zoom))
-                        );
-                    }
+            filter: function () { return (feature.kind != 'ocean' && feature.kind != 'riverbank') && zoom >= 14; }
+            style:
+                color: [0.6, 0.6, 0.975]
+                width: function() {return (2.5 * Math.log(zoom));}
 
     roads:
-        interactive: true  # shows popup labels
-        order: function () { return feature.sort_key * .000025; }
-        color:
-            default: [0.4, 0.4, 0.4]
-            highway: [1.0, 1.0, 1.0]
-            major_road: [0.5, 0.5, 0.5]
-            minor_road: [0.65, 0.65, 0.65]
-            path: [0.8, 0.8, 0.8]
-            rail: [0.5, 0.0, 0.0]
-            debug: [1, 0, 0]
-        width:
-            default: 8
-            highway: 10
-            major_road: 8
-            minor_road: 5
-            path: 3
-        outline:
-            color:
-                default: [0.2, 0.2, 0.2]
-            width:
-                default: 2
-                highway: 3
-                major_road: 1
-                minor_road: 1
-                path: 1
+        geometry: { source: osm, filter: roads }
+        style:
+            interactive: true  # shows popup labels
+            order: function () { return 3+(feature.sort_key * .000025); }
+            color: [0.4, 0.4, 0.4]
+            width: 8
+            outline:
+                color: [0.2, 0.2, 0.2]
+                width: 2
+        highway:
+            filter: { kind: highway }
+            style:
+                color: [1.0, 1.0, 1.0]
+                width: 10
+                outline:
+                    color: [0.2, 0.2, 0.2]
+                    width: 3
+        major_road:
+            filter: { kind: major_road }
+            style:
+                color: [0.5, 0.5, 0.5]
+                width: 8
+                outline:
+                    width: 1
+        minor_road:
+            filter: { kind: minor_road }
+            style:
+                color: [0.65, 0.65, 0.65]
+                width: 5
+                outline:
+                    width: 1
+        path:
+            filter: { kind: path }
+            style:
+                color: [0.8, 0.8, 0.8]
+                width: 6
+                outline:
+                    width: 1
+        rail:
+            filter: { kind: rail }
+            style:
+                color: [0.5, 0.0, 0.0]
 
     buildings:
-        color:
-            default: [.5, .5, .5]
-        extrude:
-            default: function () { return ((zoom >= 15 && feature.height > 20) || zoom >= 16) }
+        geometry: { source: osm, filter: buildings }
+        style:
+            order: 4
+            color: [.5, .5, .5]
+            extrude: function () { return ((zoom >= 15 && feature.height > 20) || zoom >= 16) }
 
-    pois:
-        mode:
-            name: points
-        filter: function () { return zoom >= 15 && feature.name != null; }
-        # visible: false
-        interactive: true  # shows popup labels
-        color:
-            default: [1, 1, 0]
-        size:
-            default: 5px
-            
+    # pois:
+    #     mode:
+    #         name: points
+    #     filter: function () { return zoom >= 15 && feature.name != null; }
+    #     # visible: false
+    #     interactive: true  # shows popup labels
+    #     color:
+    #         default: [1, 1, 0]
+    #     size:
+    #         default: 5px
+    #         
