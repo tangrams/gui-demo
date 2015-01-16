@@ -29,21 +29,8 @@ layers:
         geometry: { source: osm, filter: landuse }
         style:
             interactive: true  # shows popup labels
-        parks:
-            filter: { kind: park }
-            style:
-                order: 1
-                color: [0.5, 0.875, 0.5]
-        playgrounds:
-            filter: { kind: [pitch, playground] }
-            style:
-                order: 1.1
-                color: [0.3, 0.675, 0.3]
-        cemeteries:
-            filter: { kind: cemetery }
-            style:
-                order: 1
-                color: [0.3, 0.4, 0.3]
+            order: 1
+            color: [0.5, 0.875, 0.5]
 
     water:
         geometry: { source: osm, filter: water }
@@ -62,45 +49,11 @@ layers:
         style:
             interactive: true  # shows popup labels
             order: function () { return 3+(feature.sort_key * .000025); }
-            color: [0.4, 0.4, 0.4]
+            color: [0.8, .8, .8]
             width: 8
             outline:
                 color: [0.2, 0.2, 0.2]
                 width: 2
-        highway:
-            filter: { kind: highway }
-            style:
-                color: [1.0, 1.0, 1.0]
-                width: 10
-                outline:
-                    color: [0.2, 0.2, 0.2]
-                    width: 3
-        major_road:
-            filter: { kind: major_road }
-            style:
-                color: [0.5, 0.5, 0.5]
-                width: 8
-                outline:
-                    width: 1
-        minor_road:
-            filter: { kind: minor_road }
-            style:
-                color: [0.65, 0.65, 0.65]
-                width: 5
-                outline:
-                    width: 1
-        path:
-            filter: { kind: path }
-            style:
-                color: [0.8, 0.8, 0.8]
-                width: 6
-                outline:
-                    width: 1
-        rail:
-            filter: { kind: rail }
-            style:
-                color: [0.5, 0.0, 0.0]
-
     buildings:
         geometry: { source: osm, filter: buildings }
         style:

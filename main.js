@@ -70,85 +70,31 @@
     // Create dat GUI
     var gui = new dat.GUI({ autoPlace: true });
     function addGUI () {
+
         gui.domElement.parentNode.style.zIndex = 5;
         window.gui = gui;
-
-        // Camera
-        var camera_types = {
-            'Flat': 'flat',
-            'Perspective': 'perspective',
-            'Isometric': 'isometric'
-        };
-        gui.camera = layer.scene.styles.camera.type;
-        gui.add(gui, 'camera', camera_types).onChange(function(value) {
-            layer.scene.styles.camera.type = value;
-            layer.scene.updateStyles();
-        });
-
-        // Lighting
-        var lighting_presets = {
-            'Point': {
-                type: 'point',
-                position: [0, 0, 200],
-                ambient: 0.5,
-                backlight: true
-            },
-            'Directional': {
-                type: 'directional',
-                direction: [-1, 0, -.5],
-                ambient: 0.5
-            },
-            'Spotlight': {
-                type: 'spotlight',
-                position: [0, 0, 500],
-                direction: [0, 0, -1],
-                inner_angle: 20,
-                outer_angle: 25,
-                ambient: 0.2
-            },
-            'Night': {
-                type: 'point',
-                position: [0, 0, 50],
-                ambient: 0,
-                backlight: false
-            }
-        };
-        var lighting_options = Object.keys(lighting_presets);
-        for (var k=0; k < lighting_options.length; k++) {
-            if (lighting_presets[lighting_options[k]].type === layer.scene.styles.lighting.type) {
-                gui.lighting = lighting_options[k];
-                break;
-            }
-        }
-        gui.add(gui, 'lighting', lighting_options).onChange(function(value) {
-            layer.scene.styles.lighting = lighting_presets[value];
-            layer.scene.updateStyles();
-        });
 
         // Layers
         var layer_gui = gui.addFolder('Layers');
         var layer_controls = {};
         var layer_colors = {};
-        layer.scene.layers.forEach(function(l) {
-            if (layer.scene.styles.layers[l.name] == null) {
+        Object.keys(layer.scene.config.layers).forEach(function(l) {
+            if (layer.scene.config.layers[l] == null) {
                 return;
             }
-
-            layer_controls[l.name] = !(layer.scene.styles.layers[l.name].visible == false);
+            layer_controls[l] = !(layer.scene.config.layers[l].style.visible == false);
             layer_gui.
-                add(layer_controls, l.name).
+                add(layer_controls, l).
                 onChange(function(value) {
-                    layer.scene.styles.layers[l.name].visible = value;
+                    layer.scene.config.layers[l].style.visible = value;
                     layer.scene.rebuildGeometry();
                 });
-            var c = layer.scene.styles.layers[l.name].color.default;
-            layer_colors[l.name] = [c[0]*255, c[1]*255, c[2]*255];
-            console.log(l.name, layer_colors[l.name]);
+            var c = layer.scene.config.layers[l].style.color;
+            layer_colors[l] = [c[0]*255, c[1]*255, c[2]*255];
             layer_gui.
-                addColor(layer_colors, l.name).
+                addColor(layer_colors, l).
                 onChange(function(value) {
-                    layer.scene.styles.layers[l.name].color.default = [value[0]/255, value[1]/255, value[2]/255];
-                    console.log(value);
+                    layer.scene.config.layers[l].style.color = [value[0]/255, value[1]/255, value[2]/255];
                     layer.scene.rebuildGeometry();
                     });
         });
@@ -159,7 +105,9 @@
     window.addEventListener('load', function () {
         // Scene initialized
         layer.on('init', function() {
+            addGUI();
             resizeMap();
+
         });
         layer.addTo(map);
     });
