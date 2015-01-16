@@ -13,12 +13,6 @@ lighting:
     direction: [0, 1, -.5]
     ambient: 0.5
 
-    # type: point
-    # position: [0, 0, 150] # relative to camera position, in pixels
-    # ambient: 0.25
-    # backlight: true # illuminates buildings when the light is inside them
-
-
 layers:
     earth:
         geometry: { source: osm, filter: earth }
@@ -60,15 +54,3 @@ layers:
             order: 4
             color: [.5, .5, .5]
             extrude: function () { return ((zoom >= 15 && feature.height > 20) || zoom >= 16) }
-
-    # pois:
-    #     mode:
-    #         name: points
-    #     filter: function () { return zoom >= 15 && feature.name != null; }
-    #     # visible: false
-    #     interactive: true  # shows popup labels
-    #     color:
-    #         default: [1, 1, 0]
-    #     size:
-    #         default: 5px
-    #         
