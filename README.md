@@ -1,7 +1,7 @@
 tangram-gui-demo
 ================
 
-A demo showing using a gui to change styles in [Tangram](http://github.com/tangrams/tangram).
+A demo showing the use of a gui to change styles in [Tangram](http://github.com/tangrams/tangram).
 
 Live demo: http://tangrams.github.io/tangram-gui-demo
 
