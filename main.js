@@ -81,35 +81,6 @@
             scene.updateConfig();
         });
 
-        // Lighting
-        var lighting_presets = {
-            'Point': {
-                type: 'point',
-                position: [0, 0, 200],
-                ambient: 0.5,
-                backlight: true
-            },
-            'Directional': {
-                type: 'directional',
-                direction: [-1, 0, -.5],
-                ambient: 0.5
-            },
-            'Spotlight': {
-                type: 'spotlight',
-                position: [0, 0, 500],
-                direction: [0, 0, -1],
-                inner_angle: 20,
-                outer_angle: 25,
-                ambient: 0.2
-            },
-            'Night': {
-                type: 'point',
-                position: [0, 0, 50],
-                ambient: 0,
-                backlight: false
-            }
-        };
-
         // Layers
         var layer_gui = gui.addFolder('Layers');
         var layer_colors = {};

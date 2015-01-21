@@ -3,26 +3,15 @@ camera:
     focal_length: [[16, 2], [20, 6]] # pairs of [zoom, focal len]
     vanishing_point: [-250, -250] # relative to center of screen, in pixels
 
-    # type: isometric
-    # axis: [1, .5]
-
-    # type: flat
-
 lighting:
     type: directional
     direction: [0, 1, -.5]
     ambient: 0.5
 
-    # type: point
-    # position: [0, 0, 150] # relative to camera position, in pixels
-    # ambient: 0.25
-    # backlight: true # illuminates buildings when the light is inside them
-
 sources:
     osm:
         type: 'GeoJSONTileSource'
         url:  'http://vector.mapzen.com/osm/all/{z}/{x}/{y}.json'
-
 
 layers:
     earth:
@@ -94,15 +83,3 @@ layers:
             order: 4
             color: [.5, .5, .5]
             extrude: function () { return ((zoom >= 15 && feature.height > 20) || zoom >= 16) }
-
-    # pois:
-    #     mode:
-    #         name: points
-    #     filter: function () { return zoom >= 15 && feature.name != null; }
-    #     # visible: false
-    #     interactive: true  # shows popup labels
-    #     color:
-    #         default: [1, 1, 0]
-    #     size:
-    #         default: 5px
-    #         
