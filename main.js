@@ -35,10 +35,6 @@
     });
 
     var layer = Tangram.leafletLayer({
-        source: {
-            type: 'GeoJSONTileSource',
-            url:  'http://vector.mapzen.com/osm/all/{z}/{x}/{y}.json'
-        },
         scene: 'styles.yaml',
         numWorkers: 2,
         attribution: 'Map data &copy; OpenStreetMap contributors | <a href="https://github.com/tangrams/tangram" target="_blank">Source Code</a>',
@@ -74,28 +70,42 @@
         gui.domElement.parentNode.style.zIndex = 5;
         window.gui = gui;
 
+        // Camera
+        var camera_types = {
+            'Flat': 'flat',
+            'Perspective': 'perspective',
+            'Isometric': 'isometric'
+        };
+        gui.camera = scene.config.camera.type;
+        gui.add(gui, 'camera', camera_types).onChange(function(value) {
+            scene.config.camera.type = value;
+            scene.updateConfig();
+        });
+
         // Layers
         var layer_gui = gui.addFolder('Layers');
-        var layer_controls = {};
         var layer_colors = {};
-        Object.keys(layer.scene.config.layers).forEach(function(l) {
-            if (layer.scene.config.layers[l] == null) {
+        var layer_controls = {};
+        Object.keys(scene.config.layers).forEach(function(l) {
+            if (scene.config.layers[l] == null) {
                 return;
             }
-            layer_controls[l] = !(layer.scene.config.layers[l].style.visible == false);
+
+            layer_controls[l] = !(scene.config.layers[l].style.visible == false);
             layer_gui.
                 add(layer_controls, l).
                 onChange(function(value) {
-                    layer.scene.config.layers[l].style.visible = value;
-                    layer.scene.rebuildGeometry();
+                    scene.config.layers[l].style.visible = value;
+                    scene.rebuildGeometry();
                 });
-            var c = layer.scene.config.layers[l].style.color;
+            var c = scene.config.layers[l].style.color;
             layer_colors[l] = [c[0]*255, c[1]*255, c[2]*255];
             layer_gui.
                 addColor(layer_colors, l).
                 onChange(function(value) {
-                    layer.scene.config.layers[l].style.color = [value[0]/255, value[1]/255, value[2]/255];
-                    layer.scene.rebuildGeometry();
+                    scene.config.layers[l].style.color = [value[0]/255, value[1]/255, value[2]/255];
+                    console.log(value);
+                    scene.rebuildGeometry();
                     });
         });
         layer_gui.open();
