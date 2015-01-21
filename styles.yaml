@@ -8,14 +8,11 @@ lighting:
     direction: [0, 1, -.5]
     ambient: 0.5
 
-<<<<<<< HEAD
-=======
 sources:
     osm:
         type: 'GeoJSONTileSource'
         url:  'http://vector.mapzen.com/osm/all/{z}/{x}/{y}.json'
 
->>>>>>> conversion
 layers:
     earth:
         geometry: { source: osm, filter: earth }
@@ -26,10 +23,7 @@ layers:
         geometry: { source: osm, filter: landuse }
         style:
             interactive: true  # shows popup labels
-<<<<<<< HEAD
             order: 1
-=======
->>>>>>> conversion
             color: [0.5, 0.875, 0.5]
 
     water:
@@ -54,8 +48,6 @@ layers:
             outline:
                 color: [0.2, 0.2, 0.2]
                 width: 2
-<<<<<<< HEAD
-=======
         highway:
             filter: { kind: highway }
             style:
@@ -83,10 +75,7 @@ layers:
                     width: 1
         rail:
             filter: { kind: rail }
-            style:
-                color: [0.5, 0.0, 0.0]
 
->>>>>>> conversion
     buildings:
         geometry: { source: osm, filter: buildings }
         style:
