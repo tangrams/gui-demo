@@ -109,6 +109,40 @@
                     });
         });
         layer_gui.open();
+
+        // Lighting
+        var light_gui = gui.addFolder('Light');
+        var light_controls = {
+            "x position": .3,
+            "y position": .5,
+            "diffuse": 1,
+            "ambient": .5
+        };
+        light_gui.
+            add(light_controls, "x position", -1, 1).
+            onChange(function(value) {
+                scene.config.lights.light1.direction[0] = -value;
+                scene.updateConfig();
+            });
+        light_gui.
+            add(light_controls, "y position", -1, 1).
+            onChange(function(value) {
+                scene.config.lights.light1.direction[1] = -value;
+                scene.updateConfig();
+           });
+        light_gui.
+            add(light_controls, "diffuse", 0, 2).
+            onChange(function(value) {
+                scene.config.lights.light1.diffuse = value;
+                scene.updateConfig();
+            });
+        light_gui.
+            add(light_controls, "ambient", 0, 1).
+            onChange(function(value) {
+                scene.config.lights.light1.ambient = value;
+                scene.updateConfig();
+            });
+        light_gui.open();
     }
 
     /***** Render loop *****/
