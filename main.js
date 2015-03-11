@@ -121,26 +121,22 @@
         light_gui.
             add(light_controls, "x position", -1, 1).
             onChange(function(value) {
-                scene.config.lights.light1.direction[0] = -value;
-                scene.updateConfig();
+                scene.lights.light1.direction[0] = -value;
             });
         light_gui.
             add(light_controls, "y position", -1, 1).
             onChange(function(value) {
-                scene.config.lights.light1.direction[1] = -value;
-                scene.updateConfig();
+                scene.lights.light1.direction[1] = -value;
            });
         light_gui.
             add(light_controls, "diffuse", 0, 2).
             onChange(function(value) {
-                scene.config.lights.light1.diffuse = value;
-                scene.updateConfig();
+                scene.lights.light1.diffuse = value;
             });
         light_gui.
             add(light_controls, "ambient", 0, 1).
             onChange(function(value) {
-                scene.config.lights.light1.ambient = value;
-                scene.updateConfig();
+                scene.lights.light1.ambient = value;
             });
         light_gui.open();
     }
