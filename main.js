@@ -115,6 +115,7 @@
         var light_controls = {
             "x position": .3,
             "y position": .5,
+            "z position": .5,
             "diffuse": 1,
             "ambient": .5
         };
@@ -122,21 +123,31 @@
             add(light_controls, "x position", -1, 1).
             onChange(function(value) {
                 scene.lights.light1.direction[0] = -value;
+                scene.render();
             });
         light_gui.
             add(light_controls, "y position", -1, 1).
             onChange(function(value) {
                 scene.lights.light1.direction[1] = -value;
+                scene.render();
+           });
+        light_gui.
+            add(light_controls, "z position", 0, 1).
+            onChange(function(value) {
+                scene.lights.light1.direction[2] = -value;
+                scene.render();
            });
         light_gui.
             add(light_controls, "diffuse", 0, 2).
             onChange(function(value) {
-                scene.lights.light1.diffuse = value;
+                scene.lights.light1.diffuse = [value, value, value, 1];
+                scene.render();
             });
         light_gui.
             add(light_controls, "ambient", 0, 1).
             onChange(function(value) {
-                scene.lights.light1.ambient = value;
+                scene.lights.light1.ambient = [value, value, value, 1];
+                scene.render();
             });
         light_gui.open();
     }
