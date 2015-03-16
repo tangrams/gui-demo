@@ -17,19 +17,19 @@ sources:
 
 layers:
     earth:
-        geometry: { source: osm, filter: earth }
+        data: { source: osm, filter: earth }
         style:
             color: [0.175, 0.175, 0.175]
 
     landuse:
-        geometry: { source: osm, filter: landuse }
+        data: { source: osm, filter: landuse }
         style:
             interactive: true  # shows popup labels
             order: 1
             color: [0.5, 0.875, 0.5]
 
     water:
-        geometry: { source: osm, filter: water }
+        data: { source: osm, filter: water }
         style:
             order: 2
             interactive: true  # shows popup labels
@@ -41,7 +41,7 @@ layers:
                 width: function() {return (2.5 * Math.log(zoom));}
 
     roads:
-        geometry: { source: osm, filter: roads }
+        data: { source: osm, filter: roads }
         style:
             interactive: true  # shows popup labels
             order: function () { return 3+(feature.sort_key * .000025); }
@@ -79,7 +79,7 @@ layers:
             filter: { kind: rail }
 
     buildings:
-        geometry: { source: osm, filter: buildings }
+        data: { source: osm, filter: buildings }
         style:
             order: 4
             color: [.5, .5, .5]
