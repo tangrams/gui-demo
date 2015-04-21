@@ -19,6 +19,7 @@ layers:
     earth:
         data: { source: osm, layer: earth }
         style:
+            order: 0
             color: [0.175, 0.175, 0.175]
 
     landuse:
