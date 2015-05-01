@@ -86,26 +86,36 @@
         var layer_gui = gui.addFolder('Layers');
         var layer_colors = {};
         var layer_controls = {};
-        Object.keys(scene.config.layers).forEach(function(l) {
-            if (scene.config.layers[l] == null) {
+        Object.keys(layer.scene.config.layers).forEach(function(l) {
+            if (!layer.scene.config.layers[l]) {
                 return;
             }
 
-            layer_controls[l] = !(scene.config.layers[l].style.visible == false);
+            layer_controls[l] = !(layer.scene.config.layers[l].visible == false);
             layer_gui.
                 add(layer_controls, l).
                 onChange(function(value) {
-                    scene.config.layers[l].style.visible = value;
-                    scene.rebuildGeometry();
+                    layer.scene.config.layers[l].visible = value;
+                    layer.scene.rebuildGeometry();
                 });
-            var c = scene.config.layers[l].style.color;
+            try {
+                var c = layer.scene.config.layers[l].draw.polygons.color;
+            }
+            catch(e) {
+                var c = layer.scene.config.layers[l].draw.lines.color;
+            }
             layer_colors[l] = [c[0]*255, c[1]*255, c[2]*255];
             layer_gui.
                 addColor(layer_colors, l).
                 onChange(function(value) {
-                    scene.config.layers[l].style.color = [value[0]/255, value[1]/255, value[2]/255];
+                    try {
+                        layer.scene.config.layers[l].draw.polygons.color = [value[0]/255, value[1]/255, value[2]/255];
+                    }
+                    catch(e) {
+                        layer.scene.config.layers[l].draw.lines.color = [value[0]/255, value[1]/255, value[2]/255];
+                    }
                     console.log(value);
-                    scene.rebuildGeometry();
+                    layer.scene.rebuildGeometry();
                     });
         });
         layer_gui.open();

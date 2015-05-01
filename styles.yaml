@@ -12,76 +12,92 @@ lights:
 
 sources:
     osm:
-        type: MVTSource
+        type: MVT
         url:  http://vector.mapzen.com/osm/all/{z}/{x}/{y}.mapbox
 
 layers:
     earth:
         data: { source: osm, layer: earth }
-        style:
-            order: 0
-            color: [0.175, 0.175, 0.175]
+        draw:
+            polygons:
+                order: 0
+                color: [0.175, 0.175, 0.175]
 
     landuse:
         data: { source: osm, layer: landuse }
-        style:
-            interactive: true  # shows popup labels
-            order: 1
-            color: [0.5, 0.875, 0.5]
+        draw:
+            polygons:
+                interactive: true  # shows popup labels
+                order: 1
+                color: [0.5, 0.875, 0.5]
 
     water:
         data: { source: osm, layer: water }
-        style:
-            order: 2
-            interactive: true  # shows popup labels
-            color: [0.5, 0.5, 0.875]
+        draw:
+            polygons:
+                order: 2
+                interactive: true  # shows popup labels
+                color: [0.5, 0.5, 0.875]
         outline:
-            filter: function () { return (feature.kind != 'ocean' && feature.kind != 'riverbank') && zoom >= 14; }
-            style:
-                color: [0.6, 0.6, 0.975]
-                width: function() {return (2.5 * Math.log(zoom));}
+            filter: function () { return (feature.kind != 'ocean' && feature.kind != 'riverbank') && $zoom >= 14; }
+            draw:
+                lines:
+                    color: [0.6, 0.6, 0.975]
+                    width: function() {return (2.5 * Math.log($zoom));}
 
     roads:
         data: { source: osm, layer: roads }
-        style:
-            interactive: true  # shows popup labels
-            order: function () { return 3+(feature.sort_key * .000025); }
-            color: [0.8, .8, .8]
-            width: 8
+        draw:
+            lines:
+                interactive: true  # shows popup labels
+                order: function () { return 3+(feature.sort_key * .000025); }
+                color: [0.8, .8, .8]
+                width: 8
             outline:
+                order: function () { return 2+(feature.sort_key * .000025); }
+                style: lines
                 color: [0.2, 0.2, 0.2]
                 width: 2
         highway:
             filter: { kind: highway }
-            style:
-                width: 10
+            draw:
+                lines:
+                    width: 10
                 outline:
+                    style: lines
                     color: [0.2, 0.2, 0.2]
                     width: 3
         major_road:
             filter: { kind: major_road }
-            style:
-                width: 8
+            draw:
+                lines:
+                    width: 8
                 outline:
+                    style: lines
                     width: 1
         minor_road:
             filter: { kind: minor_road }
-            style:
-                width: 5
+            draw:
+                lines:
+                    width: 5
                 outline:
+                    style: lines
                     width: 1
         path:
             filter: { kind: path }
-            style:
-                width: 6
+            draw:
+                lines:
+                    width: 6
                 outline:
+                    style: lines
                     width: 1
         rail:
             filter: { kind: rail }
 
     buildings:
         data: { source: osm, layer: buildings }
-        style:
-            order: 4
-            color: [.5, .5, .5]
-            extrude: function () { return ((zoom >= 15 && feature.height > 20) || zoom >= 16) }
+        draw:
+            polygons:
+                order: 4
+                color: [.5, .5, .5]
+                extrude: function () { return (($zoom >= 15 && feature.height > 20) || $zoom >= 16) }
