@@ -28,7 +28,6 @@ layers:
         data: { source: osm, layer: landuse }
         draw:
             polygons:
-                interactive: true  # shows popup labels
                 order: 1
                 color: [0.5, 0.875, 0.5]
 
@@ -37,9 +36,9 @@ layers:
         draw:
             polygons:
                 order: 2
-                interactive: true  # shows popup labels
                 color: [0.5, 0.5, 0.875]
         outline:
+            # only show outlines at z14 or higher
             filter: function () { return (feature.kind != 'ocean' && feature.kind != 'riverbank') && $zoom >= 14; }
             draw:
                 lines:
@@ -48,50 +47,45 @@ layers:
 
     roads:
         data: { source: osm, layer: roads }
+        filter: { not: { is_tunnel: yes } } # don't draw tunnels
         draw:
             lines:
-                interactive: true  # shows popup labels
-                order: function () { return 3+(feature.sort_key * .000025); }
+                # separate roaeds by sort_key - this will take up a lot of order slots
+                order: function () { return 3+(feature.sort_key); }
                 color: [0.8, .8, .8]
                 width: 8
-            outline:
-                order: function () { return 2+(feature.sort_key * .000025); }
-                style: lines
-                color: [0.2, 0.2, 0.2]
-                width: 2
+                outline:
+                    color: [0.2, 0.2, 0.2]
+                    width: 2
         highway:
             filter: { kind: highway }
             draw:
                 lines:
                     width: 10
-                outline:
-                    style: lines
-                    color: [0.2, 0.2, 0.2]
-                    width: 3
+                    outline:
+                        color: [0.2, 0.2, 0.2]
+                        width: 3
         major_road:
             filter: { kind: major_road }
             draw:
                 lines:
                     width: 8
-                outline:
-                    style: lines
-                    width: 1
+                    outline:
+                        width: 1
         minor_road:
             filter: { kind: minor_road }
             draw:
                 lines:
                     width: 5
-                outline:
-                    style: lines
-                    width: 1
+                    outline:
+                        width: 1
         path:
             filter: { kind: path }
             draw:
                 lines:
                     width: 6
-                outline:
-                    style: lines
-                    width: 1
+                    outline:
+                        width: 1
         rail:
             filter: { kind: rail }
 
@@ -99,6 +93,8 @@ layers:
         data: { source: osm, layer: buildings }
         draw:
             polygons:
-                order: 4
+                # make sure buildings are on top of all the separated road layers
+                order: 50
                 color: [.5, .5, .5]
+                # at z15, only extrude buildings at least 20 m tall; at z16 and higher, extrude everything
                 extrude: function () { return (($zoom >= 15 && feature.height > 20) || $zoom >= 16) }

@@ -114,7 +114,6 @@
                     catch(e) {
                         layer.scene.config.layers[l].draw.lines.color = [value[0]/255, value[1]/255, value[2]/255];
                     }
-                    console.log(value);
                     layer.scene.rebuildGeometry();
                     });
         });
