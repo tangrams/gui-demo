@@ -50,7 +50,7 @@ layers:
         filter: { is_tunnel: no } # don't draw tunnels
         draw:
             lines:
-                # separate roaeds by sort_key - this will take up a lot of order slots
+                # separate roads by sort_key - this will take up a lot of order slots
                 order: function () { return 3+(feature.sort_key); }
                 color: [0.8, .8, .8]
                 width: 8
