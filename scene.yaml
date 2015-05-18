@@ -47,7 +47,7 @@ layers:
 
     roads:
         data: { source: osm, layer: roads }
-        filter: { not: { is_tunnel: yes } } # don't draw tunnels
+        filter: { is_tunnel: no } # don't draw tunnels
         draw:
             lines:
                 # separate roaeds by sort_key - this will take up a lot of order slots
