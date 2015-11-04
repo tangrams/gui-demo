@@ -67,7 +67,7 @@
     var gui = new dat.GUI({ autoPlace: true });
     function addGUI () {
 
-        gui.domElement.parentNode.style.zIndex = 5;
+        gui.domElement.parentNode.style.zIndex = 500;
         window.gui = gui;
 
         // Camera

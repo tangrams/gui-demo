@@ -12,14 +12,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Gui demo - Tangram</title>
     <link rel="stylesheet" href="main.css" />
-    <link rel="stylesheet" href="lib/leaflet/leaflet.css" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.css" />
+
+    <style>
+      body {
+        margin: 0px;
+        border: 0px;
+        padding: 0px;
+      }
+
+      #map {
+          background: rgba(0, 0, 0, 0);
+      }
+
+      .label {
+          width: 200px;
+          margin-left: -100px;
+          position: absolute;
+          z-index: 10;
+          text-align: center;
+          font-family: Helvetica, sans-serif;
+          font-size: 12px;
+      }
+
+      .labelInner {
+          padding: 2px;
+          background: white;
+          opacity: 0.75;
+      }
+  </style>
   </head>
 
   <body>
     <div id="map"></div>
 
     <!-- Start of 3rd party libraries -->
-    <script src="lib/leaflet/leaflet.js"></script>
+    <script src="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.js"></script>
     <!-- bog-standard leaflet URL hash -->
     <script src="lib/leaflet-hash.js"></script>
     <!-- A lightweight graphical user interface for changing variables in JavaScript.  -->
