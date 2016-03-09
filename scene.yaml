@@ -21,21 +21,21 @@ layers:
         data: { source: osm, layer: earth }
         draw:
             polygons:
-                order: 0
+                order: function() { return feature.sort_key; }
                 color: [0.175, 0.175, 0.175]
 
     landuse:
         data: { source: osm, layer: landuse }
         draw:
             polygons:
-                order: 1
+                order: function() { return feature.sort_key; }
                 color: [0.5, 0.875, 0.5]
 
     water:
         data: { source: osm, layer: water }
         draw:
             polygons:
-                order: 2
+                order: function() { return feature.sort_key; }
                 color: [0.5, 0.5, 0.875]
         outline:
             # only show outlines at z14 or higher
@@ -47,16 +47,14 @@ layers:
 
     roads:
         data: { source: osm, layer: roads }
-        filter: { is_tunnel: no, not: {kind: [ferry]} } # don't draw tunnels
+        filter: 
+            - is_tunnel: no
+            - not: { kind: [ferry] }
         draw:
             lines:
-                # separate roads by sort_key - this will take up a lot of order slots
-                order: function () { return 3+(feature.sort_key); }
+                order: function() { return feature.sort_key; }
                 color: [0.8, .8, .8]
                 width: 8
-                outline:
-                    color: [0.2, 0.2, 0.2]
-                    width: 2
         highway:
             filter: { kind: highway }
             draw:
@@ -94,7 +92,7 @@ layers:
         draw:
             polygons:
                 # make sure buildings are on top of all the separated road layers
-                order: 50
+                order: function() { return feature.sort_key; }
                 color: [.5, .5, .5]
                 # at z15, only extrude buildings at least 20 m tall; at z16 and higher, extrude everything
                 extrude: function () { return (($zoom >= 15 && feature.height > 20) || $zoom >= 16) }
