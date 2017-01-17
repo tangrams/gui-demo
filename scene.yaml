@@ -13,7 +13,7 @@ lights:
 sources:
     osm:
         type: TopoJSON
-        url:  https://vector.mapzen.com/osm/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-HqUVidw
+        url:  http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson?api_key=vector-tiles-HqUVidw
         max_zoom: 16
 
 layers:
@@ -21,21 +21,21 @@ layers:
         data: { source: osm, layer: earth }
         draw:
             polygons:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: [0.175, 0.175, 0.175]
 
     landuse:
         data: { source: osm, layer: landuse }
         draw:
             polygons:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: [0.5, 0.875, 0.5]
 
     water:
         data: { source: osm, layer: water }
         draw:
             polygons:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: [0.5, 0.5, 0.875]
         outline:
             # only show outlines at z14 or higher
@@ -52,7 +52,7 @@ layers:
             - not: { kind: [ferry] }
         draw:
             lines:
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: [0.8, .8, .8]
                 width: 8
         highway:
@@ -92,7 +92,7 @@ layers:
         draw:
             polygons:
                 # make sure buildings are on top of all the separated road layers
-                order: function() { return feature.sort_key; }
+                order: function() { return feature.sort_rank; }
                 color: [.5, .5, .5]
                 # at z15, only extrude buildings at least 20 m tall; at z16 and higher, extrude everything
                 extrude: function () { return (($zoom >= 15 && feature.height > 20) || $zoom >= 16) }
