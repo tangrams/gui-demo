@@ -50,7 +50,6 @@
     }
 
     window.addEventListener('resize', resizeMap);
-    resizeMap();
 
     /***** GUI/debug controls *****/
 
