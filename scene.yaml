@@ -11,30 +11,30 @@ lights:
         ambient: 0.5
 
 sources:
-    mapzen:
+    nextzen:
         type: TopoJSON
-        url:  http://tile.mapzen.com/mapzen/vector/v1/all/{z}/{x}/{y}.topojson
+        url:  https://tile.nextzen.org/tilezen/vector/v1/all/{z}/{x}/{y}.topojson
         url_params:
-            api_key: vector-tiles-HqUVidw
+            api_key: 3XqXMjEdT2StnrIRJ4HYbg
         max_zoom: 16
 
 layers:
     earth:
-        data: { source: mapzen, layer: earth }
+        data: { source: nextzen, layer: earth }
         draw:
             polygons:
                 order: function() { return feature.sort_rank; }
                 color: [0.175, 0.175, 0.175]
 
     landuse:
-        data: { source: mapzen, layer: landuse }
+        data: { source: nextzen, layer: landuse }
         draw:
             polygons:
                 order: function() { return feature.sort_rank; }
                 color: [0.5, 0.875, 0.5]
 
     water:
-        data: { source: mapzen, layer: water }
+        data: { source: nextzen, layer: water }
         draw:
             polygons:
                 order: function() { return feature.sort_rank; }
@@ -48,7 +48,7 @@ layers:
                     width: function() {return (2.5 * Math.log($zoom));}
 
     roads:
-        data: { source: mapzen, layer: roads }
+        data: { source: nextzen, layer: roads }
         filter: 
             - is_tunnel: no
             - not: { kind: [ferry] }
@@ -90,7 +90,7 @@ layers:
             filter: { kind: rail }
 
     buildings:
-        data: { source: mapzen, layer: buildings }
+        data: { source: nextzen, layer: buildings }
         draw:
             polygons:
                 # make sure buildings are on top of all the separated road layers
