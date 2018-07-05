@@ -76,35 +76,35 @@
         var layer_gui = gui.addFolder('Layers');
         var layer_colors = {};
         var layer_controls = {};
-        Object.keys(layer.scene.config.layers).forEach(function(l) {
-            if (!layer.scene.config.layers[l]) {
+        Object.keys(scene.config.layers).forEach(function(l) {
+            if (!scene.config.layers[l]) {
                 return;
             }
 
-            layer_controls[l] = !(layer.scene.config.layers[l].visible == false);
+            layer_controls[l] = !(scene.config.layers[l].visible == false);
             layer_gui.
                 add(layer_controls, l).
                 onChange(function(value) {
-                    layer.scene.config.layers[l].visible = value;
-                    layer.scene.rebuildGeometry();
+                    scene.config.layers[l].visible = value;
+                    scene.rebuild();
                 });
             try {
-                var c = layer.scene.config.layers[l].draw.polygons.color;
+                var c = scene.config.layers[l].draw.polygons.color;
             }
             catch(e) {
-                var c = layer.scene.config.layers[l].draw.lines.color;
+                var c = scene.config.layers[l].draw.lines.color;
             }
             layer_colors[l] = [c[0]*255, c[1]*255, c[2]*255];
             layer_gui.
                 addColor(layer_colors, l).
                 onChange(function(value) {
                     try {
-                        layer.scene.config.layers[l].draw.polygons.color = [value[0]/255, value[1]/255, value[2]/255];
+                        scene.config.layers[l].draw.polygons.color = [value[0]/255, value[1]/255, value[2]/255];
                     }
                     catch(e) {
-                        layer.scene.config.layers[l].draw.lines.color = [value[0]/255, value[1]/255, value[2]/255];
+                        scene.config.layers[l].draw.lines.color = [value[0]/255, value[1]/255, value[2]/255];
                     }
-                    layer.scene.rebuildGeometry();
+                    scene.rebuild();
                     });
         });
         layer_gui.open();
@@ -122,31 +122,31 @@
             add(light_controls, "x position", -1, 1).
             onChange(function(value) {
                 scene.lights.light1.direction[0] = -value;
-                scene.render();
+                scene.requestRedraw();
             });
         light_gui.
             add(light_controls, "y position", -1, 1).
             onChange(function(value) {
                 scene.lights.light1.direction[1] = -value;
-                scene.render();
+                scene.requestRedraw();
            });
         light_gui.
             add(light_controls, "z position", 0, 1).
             onChange(function(value) {
                 scene.lights.light1.direction[2] = -value;
-                scene.render();
+                scene.requestRedraw();
            });
         light_gui.
             add(light_controls, "diffuse", 0, 2).
             onChange(function(value) {
-                scene.lights.light1.diffuse = [value, value, value, 1];
-                scene.render();
+                scene.lights.light1.diffuse = [value, value, value];
+                scene.requestRedraw();
             });
         light_gui.
             add(light_controls, "ambient", 0, 1).
             onChange(function(value) {
-                scene.lights.light1.ambient = [value, value, value, 1];
-                scene.render();
+                scene.lights.light1.ambient = [value, value, value];
+                scene.requestRedraw();
             });
         light_gui.open();
     }
