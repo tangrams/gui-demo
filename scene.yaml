@@ -15,7 +15,7 @@ sources:
         type: TopoJSON
         url:  https://tile.nextzen.org/tilezen/vector/v1/all/{z}/{x}/{y}.topojson
         url_params:
-            api_key: 3XqXMjEdT2StnrIRJ4HYbg
+            api_key: d161Q8KATMOhSOcVGNyQ8g
         max_zoom: 16
 
 layers:
@@ -49,7 +49,7 @@ layers:
 
     roads:
         data: { source: nextzen, layer: roads }
-        filter: 
+        filter:
             - is_tunnel: no
             - not: { kind: [ferry] }
         draw:
