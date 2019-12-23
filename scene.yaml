@@ -12,10 +12,11 @@ lights:
 
 sources:
     nextzen:
-        type: TopoJSON
-        url:  https://tile.nextzen.org/tilezen/vector/v1/all/{z}/{x}/{y}.topojson
+        type: MVT
+            url: https://tile.nextzen.org/tilezen/vector/v1/512/all/{z}/{x}/{y}.mvt
         url_params:
             api_key: d161Q8KATMOhSOcVGNyQ8g
+        tile_size: 512
         max_zoom: 16
 
 layers:
@@ -44,6 +45,7 @@ layers:
             filter: function () { return (feature.kind != 'ocean' && feature.kind != 'riverbank') && $zoom >= 14; }
             draw:
                 lines:
+                    order: function() { return feature.sort_rank; }
                     color: [0.6, 0.6, 0.975]
                     width: function() {return (2.5 * Math.log($zoom));}
 
@@ -94,7 +96,7 @@ layers:
         draw:
             polygons:
                 # make sure buildings are on top of all the separated road layers
-                order: function() { return feature.sort_rank; }
+                order: function() { return feature.sort_rank || 1000; }
                 color: [.5, .5, .5]
                 # at z15, only extrude buildings at least 20 m tall; at z16 and higher, extrude everything
                 extrude: function () { return (($zoom >= 15 && feature.height > 20) || $zoom >= 16) }
